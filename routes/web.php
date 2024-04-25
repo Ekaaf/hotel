@@ -10,7 +10,6 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RoomDetailsController;
 use App\Http\Controllers\BlogDetailsController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -31,12 +30,7 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutController::class, 'about'])->name('about');
 Route::get('/rooms', [RoomController::class, 'index'])->name('rooms');
-Route::get('/room-details', [RoomController::class, 'roomDetails'])->name('room-details');
+Route::get('/room-details/{id}', [RoomController::class, 'roomDetails'])->name('room-details');
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 Route::get('/blog-details', [BlogControllerr::class, 'blogDetails'])->name('blog-details');
-
-
-
-
-
