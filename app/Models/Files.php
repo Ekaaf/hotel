@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rooms extends Model
+class Files extends Model
 {
     use HasFactory;
-    protected $table = "room_categories";
+    protected $table = "files";
     protected $primaryKey = "id";
 
-    // Define the relationship with the Files model
-    public function files()
+    // Define the relationship with the Rooms model
+    public function rooms()
     {
-        return $this->hasMany(Files::class);
+        return $this->belongsTo(Rooms::class);
     }
 }

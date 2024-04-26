@@ -33,19 +33,27 @@
             @foreach($rooms as $room)
                     <div class="col-lg-4 col-md-6">
                     <div class="room-item">
-                        <img src="{{ asset('assets/img/room/room-1.jpg') }}" alt="">
+                    
+                    <!-- Asad code starts here -->
+                    @foreach($files as $file)                        
+                        @if($file->element_id == $room->id)
+                        <img src="{{str_replace('/hotel/','/pms/', asset(str_replace(' ', '%20', $file->path.$file->filename)))}}" class="w-100">
+                        @endif
+                    @endforeach
+                    <!-- Asad code ends here -->
+                        <!-- <img src="{{ asset('assets/img/room/room-1.jpg') }}" alt=""> -->
                         <div class="ri-text">
-                            <h4>{{$room -> category}}</h4>
+                            <h4>{!! $room -> category !!}</h4>
                             <h3>{{$room -> price}}$<span>/Pernight</span></h3>
                             <table>
                                 <tbody>
                                     <tr>
                                         <td class="r-o">Size:</td>
-                                        <td>{{$room->size}} ft</td>
+                                        <td>{!! $room->size !!} ft</td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Capacity:</td>
-                                        <td> Max person {{$room->people_adult + $room->people_child }}</td>
+                                        <td> Max person {!! $room->people_adult + $room->people_child !!}</td>
                                     </tr>
                                     <tr>
                                         <td class="r-o">Bed:</td>
@@ -53,7 +61,7 @@
                                     </tr>
                                     <tr>
                                         <td class="r-o">Services:</td>
-                                        <td>{{$room->facilities}}</td>
+                                        <td>{!! $room->facilities !!}</td>
                                     </tr>
                                 </tbody>
                             </table>
