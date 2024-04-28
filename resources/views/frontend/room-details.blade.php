@@ -3,7 +3,6 @@
 Room Details
 @endsection
 @section('content')
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
 <!-- Header End -->
 
 <!-- Breadcrumb Section Begin -->
@@ -97,7 +96,7 @@ Room Details
                     <br>    
                     <div class="rd-text">
                         <div class="rd-title">
-                            <h3>{{$rooms -> category}}</h3>
+                            <h3>{{$room->category}}</h3>
                             <div class="rdt-right">
                                 <div class="rating">
                                     <i class="icon_star"></i>
@@ -109,16 +108,16 @@ Room Details
                                 <a href="{{ route('login') }}">Booking Now</a>
                             </div>
                         </div>
-                        <h2>{!!$rooms -> price!!}$<span>/Pernight</span></h2>
+                        <h2>{!!$room->price!!}$<span>/Pernight</span></h2>
                         <table>
                             <tbody>
                                 <tr>
                                     <td class="r-o">Size:</td>
-                                    <td>{!!$rooms->size!!} ft</td>
+                                    <td>{!!$room->size!!} ft</td>
                                 </tr>
                                 <tr>
                                     <td class="r-o">Capacity:</td>
-                                    <td>Max person {!!$rooms->people_adult + $rooms->people_child!!}</td>
+                                    <td>Max person {!!$room->people_adult + $room->people_child!!}</td>
                                 </tr>
                                 <tr>
                                     <td class="r-o">Bed:</td>
@@ -126,11 +125,11 @@ Room Details
                                 </tr>
                                 <tr>
                                     <td class="r-o">Services:</td>
-                                    <td>{!!$rooms->facilities!!}</td>
+                                    <td>{!!$room->facilities!!}</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <p>{!! $rooms->description !!}</p>
+                        <p>{!! $room->description !!}</p>
                     </div>
                 </div>
                 <div class="rd-reviews">

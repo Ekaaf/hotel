@@ -13,7 +13,7 @@
                     <div class="breadcrumb-text">
                         <h2>Our Rooms</h2>
                         <div class="bt-option">
-                            <a href="{{ route('room-details') }}">Room Details</a>
+                            <a href="">Room Details</a>
                             <span>Rooms</span>
                         </div>
                     </div>
@@ -35,16 +35,12 @@
                     <div class="room-item">
                     
                     <!-- Asad code starts here -->
-                    @foreach($files as $file)                        
-                        @if($file->element_id == $room->id)
-                        <img src="{{str_replace('/hotel/','/pms/', asset(str_replace(' ', '%20', $file->path.$file->filename)))}}" class="w-100">
-                        @endif
-                    @endforeach
+                    <img src="{{str_replace('/hotel/','/pms/', asset(str_replace(' ', '%20', $files[$room->id]->path.$files[$room->id]->filename)))}}" class="w-100">
                     <!-- Asad code ends here -->
                         <!-- <img src="{{ asset('assets/img/room/room-1.jpg') }}" alt=""> -->
                         <div class="ri-text">
-                            <h4>{!! $room -> category !!}</h4>
-                            <h3>{{$room -> price}}$<span>/Pernight</span></h3>
+                            <h4>{!!$room->category !!}</h4>
+                            <h3>{{$room->price}}$<span>/Pernight</span></h3>
                             <table>
                                 <tbody>
                                     <tr>

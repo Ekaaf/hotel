@@ -189,7 +189,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="{{ route('room-details') }}" class="primary-btn">More Details</a>
+                                <a href="" class="primary-btn">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -218,7 +218,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="{{ asset('room-details') }}" class="primary-btn">More Details</a>
+                                <a href="" class="primary-btn">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -247,7 +247,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="{{ route('room-details') }}" class="primary-btn">More Details</a>
+                                <a href="" class="primary-btn">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -276,7 +276,7 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="{{ route('room-details') }}" class="primary-btn">More Details</a>
+                                <a href="" class="primary-btn">More Details</a>
                             </div>
                         </div>
                     </div>

@@ -14,6 +14,6 @@ class Rooms extends Model
     // Define the relationship with the Files model
     public function files()
     {
-        return $this->hasMany(Files::class);
+        return $this->hasMany(FileModel::class);
     }
 }

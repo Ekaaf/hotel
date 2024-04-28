@@ -18,14 +18,14 @@
                         </div>
                         <a href="{{ route('login') }}"" class="bk-btn">Booking Now</a>
                         <div class="language-option">
-                            <img src="{{ asset('assets/img/flag.jpg') }}" alt="">
+                            <!-- <img src="{{ asset('assets/img/flag.jpg') }}" alt="">
                             <span>EN <i class="fa fa-angle-down"></i></span>
                             <div class="flag-dropdown">
                                 <ul>
                                     <li><a href="{{ route('index') }}">Zi</a></li>
                                     <li><a href="{{ route('index') }}">Fr</a></li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

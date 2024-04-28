@@ -19,7 +19,7 @@
     </div>
 
     <!-- Offcanvas Menu Section Begin -->
-    @include('layouts.partials.offcanvas')
+    @include('layouts.partials.header_mobile')
 
     <!-- Header Section Begin -->
     @include('layouts.partials.header')

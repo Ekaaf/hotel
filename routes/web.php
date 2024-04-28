@@ -27,9 +27,10 @@ use App\Http\Controllers\BlogDetailsController;
 
 Route::get('/register', [LoginController::class, 'register'])->name('register');
 Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('/', [HomeController::class, 'home'])->name('index');
+Route::get('/home', [HomeController::class, 'home'])->name('home');
 Route::get('/about', [AboutController::class, 'about'])->name('about');
-Route::get('/rooms', [RoomController::class, 'index'])->name('rooms');
+Route::get('/rooms', [RoomController::class, 'rooms'])->name('rooms');
 Route::get('/room-details/{id}', [RoomController::class, 'roomDetails'])->name('room-details');
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
