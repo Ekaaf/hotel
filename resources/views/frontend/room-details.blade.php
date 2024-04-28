@@ -23,6 +23,18 @@ Room Details
     </div>
 </div>
 
+<style type="text/css">
+    .carousel-indicators{
+        top: 92% !important;
+    }
+    .carousel-indicators li{
+        text-indent: 0 !important;
+        height: auto !important;
+        top: 92% !important;
+        width: 100%;
+        opacity: 1 !important;
+    }
+</style>
 <!-- Breadcrumb Section End -->
 
 <!-- Room Details Section Begin -->
@@ -31,70 +43,37 @@ Room Details
         <div class="row">
             <div class="col-lg-8">
                 <div class="room-details-item">
-
-                    <!-- Asad Code Starts Here -->
-                    <!-- <img src="{{ asset('assets/img/room/room-details.jpg') }}" alt=""> -->
-
-
-                    <style>
-                        .carousel-indicators img {
-                            width: 70px;
-                            display: block;
-                        }
-
-                        .carousel-indicators button {
-                            width: max-content !important;
-                        }
-
-                        .carousel-indicators {
-                            position: unset;
-                        }
-                    </style>
-                    <div id="carouselDemo" class="carousel slide" data-bs-wrap="true" data-bs-ride="carousel">
+                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-interval="false" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            @foreach($files as $key => $file)
+                            <li data-target="#carouselExampleCaptions" data-slide-to="0" class="{{ $key == 0 ? 'active' : '' }}">
+                                <img src="{{str_replace('/hotel/','/pms/', asset(str_replace(' ', '%20', $file->path.$file->filename)))}}">
+                            </li>
+                            @endforeach
+                        </ol>
                         <div class="carousel-inner">
                             @foreach($files as $key => $file)
                             <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
-                               <img src="{{str_replace('/hotel/','/pms/', asset(str_replace(' ', '%20', $file->path.$file->filename)))}}" class="w-100">
-                                <!-- <div class="carousel-caption">
-                                    <h5>Title Slide {{ $key }}</h5>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi, nemo?
-                                    </p>
-                                </div> -->
+                                <img src="{{str_replace('/hotel/','/pms/', asset(str_replace(' ', '%20', $file->path.$file->filename)))}}" class="d-block w-100" alt="...">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5></h5>
+                                    <p></p>
+                                </div>
                             </div>
                             @endforeach
                         </div>
-
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselDemo"
-                            data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselDemo"
-                            data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
-
-                        <div class="carousel-indicators">
-                            @foreach($files as $key => $file)
-                            <button type="button" data-bs-target="#carouselDemo" data-bs-slide-to="{{ $key }}"
-                                class="{{ $key == 0 ? 'active' : '' }}">
-                                <!-- <img src="{{ asset($file->path.'/'.$file->filename) }}" alt="Slide {{ $key }}"> -->
-                                <img src="{{str_replace('/hotel/','/pms/', asset(str_replace(' ', '%20', $file->path.$file->filename)))}}" alt="Slide {{ $key }}">
-                            </button>
-                            @endforeach
-                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
 
-
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>
-
-                    <!-- Asad Code Ends Here -->
-
-
-
                     <br>    
-                    <div class="rd-text">
+                    <div class="rd-text" style="margin-top:20%;">
                         <div class="rd-title">
                             <h3>{{$room->category}}</h3>
                             <div class="rdt-right">
@@ -237,7 +216,4 @@ Room Details
 
     </div>
 </section>
-<!-- Room Details Section End -->
-
-<!-- Footer Section Begin -->
 @endsection
