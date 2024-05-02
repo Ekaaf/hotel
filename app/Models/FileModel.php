@@ -12,8 +12,8 @@ class FileModel extends Model
     protected $primaryKey = "id";
 
     // Define the relationship with the Rooms model
-    public function rooms()
+    public function roomCategory()
     {
-        return $this->belongsTo(Rooms::class);
+        return $this->belongsTo(RoomCategory::class);
     }
 }

@@ -25,7 +25,7 @@
     <nav class="mainmenu mobile-menu">
         <ul>
             <li><a href="{{ route('index') }}">Home</a></li>
-            <li><a href="{{ route('rooms') }}">Rooms</a></li>
+            <li><a href="{{ route('room-category') }}">Rooms</a></li>
             <li><a href="{{ route('blog') }}">News</a></li>
             <li><a href="{{ route('about') }}">About Us</a></li>
             <li><a href="{{ route('contact') }}">Contact</a></li>

@@ -4,11 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\AboutController;
-use App\Http\Controllers\RoomController;
+use App\Http\Controllers\RoomCategoryController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\RoomDetailsController;
 use App\Http\Controllers\BlogDetailsController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,8 +31,14 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::get('/', [HomeController::class, 'home'])->name('index');
 Route::get('/home', [HomeController::class, 'home'])->name('home');
 Route::get('/about', [AboutController::class, 'about'])->name('about');
-Route::get('/rooms', [RoomController::class, 'rooms'])->name('rooms');
-Route::get('/room-details/{id}', [RoomController::class, 'roomDetails'])->name('room-details');
+
+//Room details
+Route::get('/room-category', [RoomCategoryController::class, 'roomCategory'])->name('room-category');
+Route::get('/room-details/{id}', [RoomCategoryController::class, 'roomDetails'])->name('room-details');
 Route::get('/contact', [ContactController::class, 'contact'])->name('contact');
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 Route::get('/blog-details', [BlogControllerr::class, 'blogDetails'])->name('blog-details');
+
+// Reservation
+Route::get('/reservation', [ReservationController::class, 'reservation'])->name('Hotel.Reservation.View');
+Route::post('/search-room-category', [ReservationController::class, 'searchRoomCategory'])->name('Hotel.SearchRoomCategory');
