@@ -20,7 +20,7 @@
                 </ul>
             </div> -->
         </div>
-        <a href="{{ route('login') }}" class="bk-btn">Booking Now</a>
+        <!-- <a href="{{ route('login') }}" class="bk-btn">Booking Now</a> -->
     </div>
     <nav class="mainmenu mobile-menu">
         <ul>

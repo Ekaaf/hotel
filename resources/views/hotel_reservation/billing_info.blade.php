@@ -187,7 +187,6 @@
                                 </div>
                             </div>
                         </div>
-                        <hr>
 
 
                         <div class="container mt-5">

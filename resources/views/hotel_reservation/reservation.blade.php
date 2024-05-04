@@ -6,7 +6,7 @@
                 <div class="container-fluid">
 
                     <!-- start page title -->
-                    <div class="row">
+                    <div class="container">
                         <div class="col-12">
                             <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-transparent">
                                 <h4 class="mb-sm-0">Reservation</h4>
@@ -25,7 +25,7 @@
                 <!-- container-fluid -->
                 @include('layouts.message')
 
-                <div class="row">
+                <div class="container">
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-body">
@@ -42,6 +42,7 @@
                                                 <label for="basiInput" class="form-label">Check-out Date:</label>
                                                 <input type="date" class="form-control" id="check_out" name="check_in" value="05/01/2024">
                                             </div>
+                                            <br>
                                         </div>
                                         <div class="col-xxl-3 col-md-6 d-flex">
                                             <button type="button" class="btn btn-primary waves-effect waves-light align-self-end"  onclick="searchRooms();">Search</button>
@@ -58,7 +59,7 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                <div class="row" id="available_room_div" style="display: none;">
+                <div class="container" id="available_room_div" style="display: none;">
                     <div class="col-xl-12">
                         <div class="card">
                             <div class="card-header align-items-center d-flex">
@@ -103,6 +104,7 @@
                     </div>
                 </div>
             </div>
+            <hr>
             
             <!-- End Page-content -->
 

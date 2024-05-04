@@ -16,7 +16,7 @@
                             <a href="{{ route('index') }}"><i class="fa fa-tripadvisor"></i></a>
                             <a href="{{ route('index') }}"><i class="fa fa-instagram"></i></a>
                         </div>
-                        <a href="{{ route('login') }}"" class="bk-btn">Booking Now</a>
+                        <a href="{{ route('Hotel.Reservation.View') }}" class="bk-btn">Booking Now</a>
                         <div class="language-option">
                             <!-- <img src="{{ asset('assets/img/flag.jpg') }}" alt="">
                             <span>EN <i class="fa fa-angle-down"></i></span>
