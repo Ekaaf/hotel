@@ -42,3 +42,6 @@ Route::get('/blog-details', [BlogControllerr::class, 'blogDetails'])->name('blog
 // Reservation
 Route::get('/reservation', [ReservationController::class, 'reservation'])->name('Hotel.Reservation.View');
 Route::post('/search-room-category', [ReservationController::class, 'searchRoomCategory'])->name('Hotel.SearchRoomCategory');
+Route::get('/billing-info', [ReservationController::class, 'billingInfo'])->name('Hotel.BillingInfo');
+Route::post('/book-room-temp', [ReservationController::class, 'bookRoomTemp'])->name('Hotel.bookRoomTemp');
+Route::post('/confirm-booking', [ReservationController::class, 'confirmBooking'])->name('Hotel.confirmBooking');

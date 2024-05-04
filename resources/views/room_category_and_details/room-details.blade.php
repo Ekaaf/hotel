@@ -197,9 +197,21 @@ Room Details
                             <i class="icon_calendar"></i>
                         </div>
                         <div class="select-option">
-                            <label for="guest">Guests:</label>
-                            <select id="guest">
-                                <option value="">3 Adults</option>
+                            <label for="adult_guest">Adult Guests:</label>
+                            <select id="adult_guest" name="adult_guest">
+                                <option value="">{!! $room_category_by_id->people_adult !!} Adults</option>
+                                <!-- @for ($i = 1; $i <= $room_category_by_id->people_adult; $i++) -->
+                                    <!-- <option value="{{ $i }}">{{ $i }} {{ $room_category_by_id->people_adult == 1 ? 'Adult' : 'Adults' }}</option> -->
+                                <!-- @endfor -->
+                            </select>
+                        </div>
+                        <div class="select-option">
+                            <label for="child_guest">Child Guests:</label>
+                            <select id="child_guest">
+                                <option value="">{!! $room_category_by_id->people_child !!} Adults</option>
+                                <!-- @for ($i = 1; $i <= $room_category_by_id->people_child; $i++) -->
+                                    <!-- <option value="{{ $i }}">{{ $i }} Child</option> -->
+                                <!-- @endfor -->
                             </select>
                         </div>
                         <div class="select-option">

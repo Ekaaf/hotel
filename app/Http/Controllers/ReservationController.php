@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Rooms;
 use App\Models\Booking;
 use Illuminate\Support\Facades\DB;
+use App\Service\MenuService;
 
 class ReservationController extends Controller
 {
@@ -31,4 +32,71 @@ class ReservationController extends Controller
                             ->groupBy('room_categories.id', 'files.path', 'files.filename')->get();
         return response()->json($available_rooms);
     }
+
+    public function bookRoomTemp(Request $request)
+    {
+        $input = [];
+        $input['check_in'] = $request->check_in;
+        $input['check_out'] = $request->check_out;
+        $input['no_of_nights'] = (int) (strtotime($request->check_out) - strtotime($request->check_in)) / (60 * 60 * 24);
+        foreach($request->booking_data as $key => $value) {
+            $input['booking_data'][$value[0]]['room_category_id'] = $value[0];
+            $input['booking_data'][$value[0]]['room_category'] = $value[1];
+            $input['booking_data'][$value[0]]['people_adult'] = $value[2];
+            $input['booking_data'][$value[0]]['people_child'] = $value[3];
+            $input['booking_data'][$value[0]]['room_price'] = $value[4];
+            $input['booking_data'][$value[0]]['no_of_rooms'] = $value[5];
+        }
+        $request->session()->put('booking_data_temp', $input);
+        return response()->json($input);
+    }
+
+    public function billingInfo(Request $request)
+    {
+        $booking_data_temp = $request->session()->get('booking_data_temp');
+        // dd($booking_data_temp);
+        return view('hotel_reservation.billing_info')->with('booking_data_temp', $booking_data_temp);
+    }
+
+    public function confirmBooking(Request $request)
+    {
+        if(null !== $request->session()->get('booking_data_temp')) {
+
+            try {
+                DB::beginTransaction();
+                $booking_data = $request->session()->get('booking_data_temp');
+                dd($request);
+                $this->menuService = new MenuService();
+                $available = $this->menuService->checkRoomAvailability($booking_data);
+                if($available['success'] == 1) {
+                    $bookings = $available['bookings'];
+
+                    $valid_price = $this->menuService->validateTotalPrice($booking_data);
+                    if($valid_price) {
+                        $user_id = $this->menuService->saveUser($request);
+                        $billing_id = $this->menuService->saveBillingInfo($request, $user_id);
+                        $this->menuService->saveBooking($request, $user_id, $billing_id, $bookings);
+                        DB::commit();
+                        $request->session()->forget('booking_data_temp');
+                        echo "Booking Successful";
+                        exit;
+                    } else {
+                        dd($valid_price);
+                    }
+                } else {
+                    dd($available);
+                }
+                return redirect('admin/room-category')->with('success', "Successfully Saved");
+            } catch (\Exception $e) {
+                dd($e);
+                DB::rollback();
+                return redirect()->back()->with('error', "Couldn't save!")->withInput();
+            }
+        } else {
+            echo "No Booking data found";
+            exit;
+        }
+
+    }
+
 }
