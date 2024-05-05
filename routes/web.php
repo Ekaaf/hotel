@@ -40,7 +40,7 @@ Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 Route::get('/blog-details', [BlogControllerr::class, 'blogDetails'])->name('blog-details');
 
 // Reservation
-Route::get('/reservation', [ReservationController::class, 'reservation'])->name('hotel.reservation');
+Route::get('/reservation', [ReservationController::class, 'reservation'])->name('Hotel.Reservation.View');
 Route::post('/search-room-category', [ReservationController::class, 'searchRoomCategory'])->name('Hotel.SearchRoomCategory');
 Route::get('/billing-info', [ReservationController::class, 'billingInfo'])->name('Hotel.BillingInfo');
 Route::post('/book-room-temp', [ReservationController::class, 'bookRoomTemp'])->name('Hotel.bookRoomTemp');
