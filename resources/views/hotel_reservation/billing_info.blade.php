@@ -135,16 +135,26 @@
                                 </div>
                                 <div class="col-xxl-5 col-md-5">
                                     <div>
-                                        <label for="mobile" class="form-label">Mobile Number</label>
-                                        <div class="input-group">
+                                        <label class="form-label">Mobile Number</label>
+                                        <div class="input-group" data-input-flag>
                                             <button class="btn btn-light border" type="button" data-bs-toggle="dropdown"
                                                 aria-expanded="false">
                                                 <img src="{{URL::to('assets/images/flags/bd.svg')}}" alt="flag img"
                                                     height="20" class="country-flagimg rounded">
                                                 <span class="ms-2 country-codeno">+ 880</span>
                                             </button>
-                                            <input type="text" class="form-control rounded-end"
-                                                placeholder="Enter number" />
+                                            <input type="text" class="form-control rounded-end flag-input" value=""
+                                                placeholder="Enter number"
+                                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+                                            <div class="dropdown-menu w-100">
+                                                <div class="p-2 px-3 pt-1 searchlist-input">
+                                                    <input type="text"
+                                                        class="form-control form-control-sm border search-countryList"
+                                                        placeholder="Search country name or country code..." id="mobile"
+                                                        name="mobile" />
+                                                </div>
+                                                <ul class="list-unstyled dropdown-menu-list mb-0"></ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -178,10 +188,9 @@
                                 </div>
                                 <div class="col-xxl-4 col-md-6">
                                     <div>
-                                        <label for="country" class="form-label">Country</label>
-                                        <br>
+                                        <label for="basiInput" class="form-label">Country</label>
                                         <select class="form-control" id="country" name="country">
-                                            <option>Select</option>
+                                            <option value="">Select</option>
                                         </select>
                                     </div>
                                 </div>
@@ -197,7 +206,6 @@
                                 <div class="col-xxl-3 col-md-6">
                                     <div>
                                         <label for="identity" class="form-label">Identity</label>
-                                        <br>
                                         <select class="form-control" id="identity" name="identity">
                                             <option value>Select</option>
                                             <option value='passport'>Passport</option>
@@ -228,7 +236,6 @@
                                 <div class="col-xxl-3 col-md-6">
                                     <div>
                                         <label for="nationality" class="form-label">Nationality</label>
-                                        <br>
                                         <select class="form-control" id="nationality" name="nationality">
                                             <option value="">Select</option>
                                         </select>
@@ -286,6 +293,7 @@
         </div>
     </form>
 </div>
+
 
 <!-- End Page-content -->
 

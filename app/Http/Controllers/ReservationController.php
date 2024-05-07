@@ -65,7 +65,7 @@ class ReservationController extends Controller
             try {
                 DB::beginTransaction();
                 $booking_data = $request->session()->get('booking_data_temp');
-                dd($request);
+                // dd($request);
                 $this->menuService = new MenuService();
                 $available = $this->menuService->checkRoomAvailability($booking_data);
                 if($available['success'] == 1) {
