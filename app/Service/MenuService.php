@@ -30,60 +30,61 @@ use App\Models\Booking;
 use App\Models\Billing;
 use App\Models\BiilingOtherInfo;
 use App\Models\RoomCategory;
+use App\Models\UserInfo;
 
-class MenuService{
-
-	public function menuTree($id = ""){
-		$menuTree = [];
-		$menus = Menu::orderBy('parent_id', 'DESC')->orderBy('serial', 'ASC')->get()->toArray();
-        foreach($menus as $menu){
-            if(is_null($menu['parent_id'])){
-                $menuTree[$menu['id']]['parent'] = $menu;
-            }
-            else{
-                $menuTree[$menu['parent_id']]['child'][] = $menu;
-            }
-        }
-        return $menuTree;
-	}
-
-    public function menuTreebyAccess($id = ""){
-        $roleID = Auth::user()->role_id;
+class MenuService
+{
+    public function menuTree($id = "")
+    {
         $menuTree = [];
-        $menus = DB::table('menus')
-                        // ->select('menus.*')->distinct()
-                        // ->select('menus.*',  DB::raw('array_agg(menu_methods.method_name) as method_name'))
-                        ->select('menus.*',  DB::raw("string_agg(menu_methods.path,',') as method_paths"), DB::raw("string_agg(menu_methods.method_name,',') as method_name"))
-                        ->leftjoin('menu_methods','menus.id','=','menu_methods.menu_id')
-                        ->leftjoin('user_access','menu_methods.id','=','user_access.menu_method_id')
-                        ->groupBy('menus.id')
-                        ->orderBy('parent_id', 'DESC')
-                        ->orderBy('serial', 'ASC');
-        if($roleID !=1){
-            $menus->where(function ($query) use ($roleID) {
-                $query->where('menus.active', 1)
-                      ->where('user_access.role_id', $roleID);
-            });
-        }
-        else{
-            $menus->orWhere('menus.active', 1);
-        }
-        $menus->orWhere('menus.default', 1);
-        $menus = $menus->get();
-        foreach($menus as $menu){
-            $menu = (array) $menu;
-            if(is_null($menu['parent_id'])){
+        $menus = Menu::orderBy('parent_id', 'DESC')->orderBy('serial', 'ASC')->get()->toArray();
+        foreach($menus as $menu) {
+            if(is_null($menu['parent_id'])) {
                 $menuTree[$menu['id']]['parent'] = $menu;
-            }
-            else{
+            } else {
                 $menuTree[$menu['parent_id']]['child'][] = $menu;
             }
         }
         return $menuTree;
     }
 
-	public function getAllRoutes(){
-		$routeCollection = \Route::getRoutes();
+    public function menuTreebyAccess($id = "")
+    {
+        $roleID = Auth::user()->role_id;
+        $menuTree = [];
+        $menus = DB::table('menus')
+                        // ->select('menus.*')->distinct()
+                        // ->select('menus.*',  DB::raw('array_agg(menu_methods.method_name) as method_name'))
+                        ->select('menus.*', DB::raw("string_agg(menu_methods.path,',') as method_paths"), DB::raw("string_agg(menu_methods.method_name,',') as method_name"))
+                        ->leftjoin('menu_methods', 'menus.id', '=', 'menu_methods.menu_id')
+                        ->leftjoin('user_access', 'menu_methods.id', '=', 'user_access.menu_method_id')
+                        ->groupBy('menus.id')
+                        ->orderBy('parent_id', 'DESC')
+                        ->orderBy('serial', 'ASC');
+        if($roleID != 1) {
+            $menus->where(function ($query) use ($roleID) {
+                $query->where('menus.active', 1)
+                      ->where('user_access.role_id', $roleID);
+            });
+        } else {
+            $menus->orWhere('menus.active', 1);
+        }
+        $menus->orWhere('menus.default', 1);
+        $menus = $menus->get();
+        foreach($menus as $menu) {
+            $menu = (array) $menu;
+            if(is_null($menu['parent_id'])) {
+                $menuTree[$menu['id']]['parent'] = $menu;
+            } else {
+                $menuTree[$menu['parent_id']]['child'][] = $menu;
+            }
+        }
+        return $menuTree;
+    }
+
+    public function getAllRoutes()
+    {
+        $routeCollection = \Route::getRoutes();
         $paths = [];
         foreach ($routeCollection as $value) {
             if (str_contains($value->getName(), 'Pms')) {
@@ -91,21 +92,22 @@ class MenuService{
             }
         }
         return $paths;
-	}
+    }
 
-    public function getUserAccessTree(){
+    public function getUserAccessTree()
+    {
         $userAccessTree = [];
         $userAccess = DB::table('menus')
-                        ->select('menus.id','menus.parent_id','menus.title', 'menus.path', 'menus.path as menu_path', 'menu_methods.type', 'menu_methods.method_name', 'menu_methods.path as menu_method_path', 'menu_methods.id as menu_method_id')
-                        ->leftjoin('menu_methods','menus.id','=','menu_methods.menu_id')
+                        ->select('menus.id', 'menus.parent_id', 'menus.title', 'menus.path', 'menus.path as menu_path', 'menu_methods.type', 'menu_methods.method_name', 'menu_methods.path as menu_method_path', 'menu_methods.id as menu_method_id')
+                        ->leftjoin('menu_methods', 'menus.id', '=', 'menu_methods.menu_id')
                         ->where('menus.default', '!=', 1)
                         ->orderBy('parent_id', 'DESC')
                         ->orderBy('serial', 'ASC')
                         ->get();
 
-        foreach($userAccess as $access){
-            if(is_null($access->parent_id)){
-                if(!array_key_exists($access->id, $userAccessTree)){
+        foreach($userAccess as $access) {
+            if(is_null($access->parent_id)) {
+                if(!array_key_exists($access->id, $userAccessTree)) {
                     $userAccessTree[$access->id]['parent_id'] = $access->parent_id;
                     $userAccessTree[$access->id]['title'] = $access->title;
                     $userAccessTree[$access->id]['path'] = $access->path;
@@ -119,7 +121,7 @@ class MenuService{
 
                 $userAccessTree[$access->id]['id'] = $access->id;
                 $userAccessTree[$access->id]['menu_methods'][] = $menu_methods_arr;
-                if($access->type ==1){
+                if($access->type == 1) {
                     $userAccessTree[$access->id]['parent_id'] = $access->parent_id;
                     $userAccessTree[$access->id]['title'] = $access->title;
                     $userAccessTree[$access->id]['path'] = $access->path;
@@ -128,9 +130,8 @@ class MenuService{
                     $userAccessTree[$access->id]['menu_method_path'] = $access->menu_method_path;
                     $userAccessTree[$access->id]['menu_method_id'] = $access->menu_method_id;
                 }
-            }
-            else{
-                if($access->type == 1){
+            } else {
+                if($access->type == 1) {
                     $userAccessTree[$access->parent_id]['child'][$access->id]['parent']  = (array) $access;
                 }
                 $userAccessTree[$access->parent_id]['child'][$access->id]['child'][]  = (array) $access;
@@ -141,94 +142,127 @@ class MenuService{
     }
 
 
-    public function menuMethods($roleID = "34"){
+    public function menuMethods($roleID = "34")
+    {
         $menuAccess = DB::table('menu_methods')
                             ->select('menus.menu_id')
-                            ->join('user_access','menu_methods.id','=','user_access.menu_method_id')
+                            ->join('user_access', 'menu_methods.id', '=', 'user_access.menu_method_id')
                             ->where(['user_access.role_id' => $roleID])
                             ->get()->toArray();
         return $menuAccess;
     }
 
-    public function imageUpload($file, $filePath = '', $fileName ='', $scaleWidth = 0, $format = 'webp', $quality = 70){
+    public function imageUpload($file, $filePath = '', $fileName = '', $scaleWidth = 0, $format = 'webp', $quality = 70)
+    {
         // if (!is_dir($filePath)) {
         //     mkdir($filePath, 0755, true);
         // }
         // dd($file);
-        if(!is_dir($filePath)){
+        if(!is_dir($filePath)) {
             mkdir($filePath, 0755, true);
         }
         $manager = new ImageManager(new Driver());
         $image = $manager->read($file);
 
         // scale down to fixed width keeping ratio
-        if($scaleWidth >0){
+        if($scaleWidth > 0) {
             $image->scaleDown(width: $scaleWidth);
         }
 
-        if($fileName == ''){
+        if($fileName == '') {
             $fileName = time();
         }
 
-        if($filePath != ''){
+        if($filePath != '') {
             $fileName = $filePath.$fileName;
         }
 
-        if($format == 'webp'){
+        if($format == 'webp') {
             $image->toWebp($quality)->save($fileName.'.webp');
-        }
-        else{
+        } else {
             $image->toJpeg($quality)->save($fileName.'.jpeg');
         }
     }
 
 
-    public function getImages($id, $types){
-        $images = FileModel::where('element_id',$id)->whereIn('type', $types)->get();
+    public function getImages($id, $types)
+    {
+        $images = FileModel::where('element_id', $id)->whereIn('type', $types)->get();
         $data = [];
-        foreach($types as $type){
+        foreach($types as $type) {
             $data[$type] = [];
         }
-        foreach($images as $image){
+        foreach($images as $image) {
             $data[$image->type][] = $image;
         }
         return $data;
     }
 
-    public function checkRoomAvailability($booking_data){
+    public function checkRoomAvailability($booking_data)
+    {
         $result = [];
         $room_category_id = array_column($booking_data['booking_data'], 'room_category_id');
-        $bookings = Booking::whereIn('room_category_id', $room_category_id)->where('to_date', '<=', $booking_data['check_in'])->where('from_date', '>=', $booking_data['check_out'])->pluck('room_id', 'room_category_id');
+        $check_in = $booking_data['check_in'];
+        $check_out = $booking_data['check_out'];
+
+        $bookings = Booking::whereIn('room_category_id', $room_category_id)->where(function ($query) use ($check_in, $check_out) {
+            $query->where('from_date', '<=', $check_in)
+                  ->where('to_date', '>', $check_in);
+        })->orWhere(function ($query) use ($check_in, $check_out) {
+            $query->where('from_date', '<', $check_out)
+                  ->where('to_date', '>=', $check_out);
+        })->pluck('room_id');
+
+        // dd($bookings);
 
         $total_rooms = Rooms::select('room_category_id', DB::raw('COUNT(rooms.id) as no_of_rooms'))->whereIn('room_category_id', $room_category_id)->groupBy('room_category_id')->get();
-        
-        if(count($bookings) == 0){
+
+        if(count($bookings) == 0) {
             $result['success'] = 1;
             $result['bookings'] = [];
-        }
-        else{
+        } else {
             $result['success'] = 1;
             $result['bookings'] = $bookings;
         }
         return $result;
     }
 
-    function saveUser($request){
+    public function saveUser($request)
+    {
         $user = new User();
         $user->email = $request->email;
         $user->password = randomPassword(8);
         $user->mobile = $request->mobile;
-        $user->role_id = Role::where('name', 'Customer')->value('id');
+        if($request->user_type == 'new_user') {
+            $user->role_id = Role::where('name', 'Customer')->value('id');
+        } elseif($request->user_type == 'guest_user') {
+            $user->role_id = Role::where('name', 'Guest')->value('id');
+        }
         $user->verified = 0;
         $user->status = 1;
         $user->created_by = Auth::user()->id;
         $user->save();
 
+
+        $userInfo = new UserInfo();
+        $userInfo->user_id = $user->id;
+        $userInfo->title = $request->title;
+        $userInfo->first_name = $request->first_name;
+        $userInfo->last_name = $request->last_name;
+        $userInfo->address = $request->address;
+        $userInfo->postal_code = $request->postal_code;
+        $userInfo->city = $request->city;
+        $userInfo->country = $request->country;
+        $userInfo->gender = $request->gender;
+        $userInfo->created_by = Auth::user()->id;
+        $userInfo->save();
+
         return $user->id;
     }
 
 
-    function saveBillingInfo($request, $user_id){
+    public function saveBillingInfo($request, $user_id)
+    {
         $booking_data = $request->session()->get('booking_data_temp');
         $total_price = array_sum(array_column($booking_data['booking_data'], 'room_price'));
 
@@ -262,51 +296,57 @@ class MenuService{
     }
 
 
-    function validateTotalPrice($booking_data){
+    public function validateTotalPrice($booking_data)
+    {
         $room_category_id = array_column($booking_data['booking_data'], 'room_category_id');
         $total_price = 0;
         $room_categories = RoomCategory::whereIn('id', $room_category_id)->pluck('price', 'id');
-        foreach($room_categories as $key=>$value){
+        foreach($room_categories as $key => $value) {
             $total_price += $value * $booking_data['no_of_nights'] * $booking_data['booking_data'][$key]['no_of_rooms'];
         }
 
         $total_price_temp = array_sum(array_column($booking_data['booking_data'], 'room_price'));
-        if($total_price_temp == $total_price){
+        if($total_price_temp == $total_price) {
             return 1;
-        }
-        else{
+        } else {
             return 0;
         }
     }
 
 
-    function saveBooking($request, $user_id, $billing_id, $bookings){
+    public function saveBooking($request, $user_id, $billing_id, $bookings)
+    {
         $booking_arr[] = [];
         $booking_data = $request->session()->get('booking_data_temp');
-        $booked_rooms = array_values($bookings);
-        if(count($booked_rooms) == 0){
-            $i = 0;
-            foreach ($booking_data['booking_data'] as $key => $value){
-                $rooms = Rooms::select('room_category_id', 'room_number')->where('room_category_id', $value['room_category_id'])->whereNotIn('room_number', $booked_rooms)->take($value['no_of_rooms'])->orderBy('room_number', 'ASC')->get();
-                foreach($rooms as $key_room => $room){
-                    $booking_arr[$i]['user_id'] = $user_id;
-                    $booking_arr[$i]['room_id'] = $room->room_number;
-                    $booking_arr[$i]['from_date'] = $booking_data['check_in'];
-                    $booking_arr[$i]['to_date'] = $booking_data['check_out'];
-                    $booking_arr[$i]['people_adult'] = $value['people_adult'][$key_room];
-                    $booking_arr[$i]['people_child'] = $value['people_child'][$key_room];
-                    $booking_arr[$i]['unit_price'] = $user_id;
-                    $booking_arr[$i]['discount'] = 0;
-                    $booking_arr[$i]['total_price'] = 0;
-                    $booking_arr[$i]['vat'] = 0;
-                    $booking_arr[$i]['created_by'] = Auth::user()->id;;
-                    $booking_arr[$i]['room_category_id'] = $room->room_category_id;
-                    $booking_arr[$i]['created_at'] = date('Y-m-d H:i:s');
-                    $i++;
-                }
+        // if(count($booked_rooms) == 0){
+        $i = 0;
+        foreach ($booking_data['booking_data'] as $key => $value) {
+            if(count($bookings) == 0) {
+                $booked_rooms = [];
+            } else {
+                $booked_rooms = $bookings->toArray();
             }
-            Booking::insert($booking_arr);
+
+            $rooms = Rooms::select('room_category_id', 'room_number')->where('room_category_id', $value['room_category_id'])->whereNotIn('room_number', $booked_rooms)->take($value['no_of_rooms'])->orderBy('room_number', 'ASC')->get();
+            foreach($rooms as $key_room => $room) {
+                $booking_arr[$i]['user_id'] = $user_id;
+                $booking_arr[$i]['room_id'] = $room->room_number;
+                $booking_arr[$i]['from_date'] = $booking_data['check_in'];
+                $booking_arr[$i]['to_date'] = $booking_data['check_out'];
+                $booking_arr[$i]['people_adult'] = $value['people_adult'][$key_room];
+                $booking_arr[$i]['people_child'] = $value['people_child'][$key_room];
+                $booking_arr[$i]['unit_price'] = $user_id;
+                $booking_arr[$i]['discount'] = 0;
+                $booking_arr[$i]['total_price'] = 0;
+                $booking_arr[$i]['vat'] = 0;
+                $booking_arr[$i]['created_by'] = Auth::user()->id;
+                ;
+                $booking_arr[$i]['room_category_id'] = $room->room_category_id;
+                $booking_arr[$i]['created_at'] = date('Y-m-d H:i:s');
+                $i++;
+            }
         }
+        Booking::insert($booking_arr);
+        // }
     }
 }
-?>

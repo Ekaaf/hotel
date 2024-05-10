@@ -26,11 +26,16 @@ use App\Http\Controllers\ReservationController;
     return view('welcome');
 }); */
 
+//Auth
 Route::get('/register', [LoginController::class, 'register'])->name('register');
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::get('/', [HomeController::class, 'home'])->name('index');
 Route::get('/home', [HomeController::class, 'home'])->name('home');
 Route::get('/about', [AboutController::class, 'about'])->name('about');
+//Profile
+Route::get('/view-profile', [LoginController::class, 'viewProfile'])->name('view-profile');
+Route::get('/update-password', [LoginController::class, 'updatePassword'])->name('update-password');
+
 
 //Room details
 Route::get('/room-category', [RoomCategoryController::class, 'roomCategory'])->name('room-category');

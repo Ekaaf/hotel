@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Rooms;
 use App\Models\Booking;
+use App\Models\User;
+use App\Models\Role;
+use App\Models\RoomCategoryRent;
 use Illuminate\Support\Facades\DB;
 use App\Service\MenuService;
 
@@ -14,24 +17,40 @@ class ReservationController extends Controller
 {
     public function reservation(Request $request)
     {
+        $request->session()->forget('booking_data_temp');
         return view('hotel_reservation.reservation');
-
     }
-
 
     public function searchRoomCategory(Request $request)
     {
+        $request->session()->forget('booking_data_temp');
         $check_in = $request->check_in;
         $check_out = $request->check_out;
-        $bookings = Booking::where('to_date', '<=', $check_in)->where('from_date', '>=', $check_out)->pluck('room_id');
-
-        $available_rooms = Rooms::select('room_categories.*', DB::raw('COUNT(room_categories.id) as no_of_rooms'), 'files.path', 'files.filename')->join('room_categories', 'rooms.room_category_id', 'room_categories.id')
+        $bookings = Booking::where(function ($query) use ($check_in, $check_out) {
+            $query->where('from_date', '<=', $check_in)
+                  ->where('to_date', '>', $check_in);
+        })->orWhere(function ($query) use ($check_in, $check_out) {
+            $query->where('from_date', '<', $check_out)
+                  ->where('to_date', '>=', $check_out);
+        })->pluck('room_id');
+        $data['available_rooms'] = Rooms::select('room_categories.*', DB::raw('COUNT(room_categories.id) as no_of_rooms'), 'files.path', 'files.filename')->join('room_categories', 'rooms.room_category_id', 'room_categories.id')
                             ->join('files', 'room_categories.id', 'files.element_id')
                             ->where('files.type', 'room-category-thumb')
                             ->whereNotIn('room_number', $bookings)
                             ->groupBy('room_categories.id', 'files.path', 'files.filename')->get();
-        return response()->json($available_rooms);
+
+        $room_categories_id = array_column($data['available_rooms']->toArray(), 'id');
+        $room_category_rents = RoomCategoryRent::whereIn('room_category_id', $room_categories_id)->where('rent_date', '>=', $check_in)->where('rent_date', '<', $check_out)->get();
+        $room_category_rent_arr = [];
+        foreach($room_category_rents as $rent) {
+            $room_category_rent_arr[$rent->room_category_id][$rent->rent_date] = ['price' => $rent->price, 'discount' => $rent->discount, 'net_price' => $rent->net_price];
+        }
+        // $data['room_category_rent_arr'] = json_encode($room_category_rent_arr);
+        $data['room_category_rent_arr'] = $room_category_rent_arr ;
+        dd($data);
+        return response()->json($data);
     }
+
 
     public function bookRoomTemp(Request $request)
     {
@@ -51,21 +70,21 @@ class ReservationController extends Controller
         return response()->json($input);
     }
 
+
     public function billingInfo(Request $request)
     {
         $booking_data_temp = $request->session()->get('booking_data_temp');
-        // dd($booking_data_temp);
-        return view('hotel_reservation.billing_info')->with('booking_data_temp', $booking_data_temp);
+        $customers = User::where('role_id', Role::where('name', 'Customer')->value('id'))->get();
+        return view('hotel_reservation.billing_info')->with('booking_data_temp', $booking_data_temp)->with('customers', $customers);
     }
+
 
     public function confirmBooking(Request $request)
     {
         if(null !== $request->session()->get('booking_data_temp')) {
-
             try {
                 DB::beginTransaction();
                 $booking_data = $request->session()->get('booking_data_temp');
-                // dd($request);
                 $this->menuService = new MenuService();
                 $available = $this->menuService->checkRoomAvailability($booking_data);
                 if($available['success'] == 1) {
@@ -73,7 +92,11 @@ class ReservationController extends Controller
 
                     $valid_price = $this->menuService->validateTotalPrice($booking_data);
                     if($valid_price) {
-                        $user_id = $this->menuService->saveUser($request);
+                        if($request->user_type != 'existing_user') {
+                            $user_id = $this->menuService->saveUser($request);
+                        } else {
+                            $user_id = $request->user_id;
+                        }
                         $billing_id = $this->menuService->saveBillingInfo($request, $user_id);
                         $this->menuService->saveBooking($request, $user_id, $billing_id, $bookings);
                         DB::commit();
@@ -97,6 +120,12 @@ class ReservationController extends Controller
             exit;
         }
 
+    }
+
+    public function getUserInfo(Request $request)
+    {
+        $user = User::join('user_info', 'users.id', 'user_info.user_id')->where('users.id', $request->user_id)->first();
+        return response()->json($user);
     }
 
 }

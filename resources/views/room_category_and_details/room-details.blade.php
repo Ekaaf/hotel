@@ -2,13 +2,12 @@
 @section('title')
 Room Details
 @endsection
-@section('content')
 <!-- Header End -->
 
+@section('content')
 <!-- Breadcrumb Section Begin -->
 <div class="breadcrumb-section">
     <div class="container">
-
         <div class="row">
             <div class="col-lg-12">
                 <div class="breadcrumb-text">
@@ -95,20 +94,61 @@ Room Details
                                     <td>{!!$room_category_by_id->size!!} ft</td>
                                 </tr>
                                 <tr>
-                                    <td class="r-o">Capacity:</td>
-                                    <td>Max person {!!$room_category_by_id->people_adult + $room_category_by_id->people_child!!}</td>
+                                    <td class="r-o">Adults:</td>
+                                    <td>Max Adults {!!$room_category_by_id->people_adult!!}</td>
                                 </tr>
                                 <tr>
-                                    <td class="r-o">Bed:</td>
-                                    <td>King Beds</td>
+                                    <td class="r-o">Children:</td>
+                                    <td>Max Children {!!$room_category_by_id->people_child!!}</td>
                                 </tr>
+                                <tr>
+                                    <td class="r-o">No. of Bed:</td>
+                                    <td>{!!$room_category_by_id->bed!!}</td>
+                                </tr>
+                                <tr>
+                                    <td class="r-o">Discount:</td>
+                                    <td>{!!$room_category_by_id->discount!!}</td>
+                                </tr>
+                                <!-- Insertion starts here -->
+                                <tr>
+                                    <td class="r-o">Package :</td>
+                                    <td>{!!$room_category_by_id->package!!}</td>
+                                </tr>
+                                <tr>
+                                    <td class="r-o">Facilities :</td>
+                                    <td>{!!$room_category_by_id->facilities!!}</td>
+                                </tr>
+                                <tr>
+                                    <td class="r-o">Check In Time :</td>
+                                    <td>{{$room_category_by_id->check_in}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="r-o">Check Out Time :</td>
+                                    <td>{{$room_category_by_id->check_out}}</td>
+                                </tr>                                    
+                                <!-- Insertion ends here -->
                                 <tr>
                                     <td class="r-o">Services:</td>
                                     <td>{!!$room_category_by_id->facilities!!}</td>
                                 </tr>
+                                <tr>
+                                    <td class="r-o">Description:</td>
+                                </tr>
                             </tbody>
                         </table>
                         <p>{!! $room_category_by_id->description !!}</p>
+                        <table>
+                            <tbody>                            
+                            <tr>
+                                <td class="r-o">Check In Instructions :</td>
+                                <td>{!!$room_category_by_id->check_in_instruction!!}</td>
+                            </tr>
+                            <tr>
+                                <td class="r-o">Cancellation Policy :</td>
+                                <td>{!!$room_category_by_id->cancellation_policy!!}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="rd-reviews">
@@ -185,7 +225,7 @@ Room Details
             <div class="col-lg-4">
                 <div class="room-booking">
                     <h3>Your Reservation</h3>
-                    <form action="#">
+                    <form action="{{ route('Hotel.Reservation.View') }}" method="POST">
                         <div class="check-date">
                             <label for="date-in">Check In:</label>
                             <input type="text" class="date-input" id="date-in">

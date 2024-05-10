@@ -19,5 +19,15 @@ class LoginController extends Controller
         return view('frontend.auth.register');
     }
 
+    public function viewProfile()
+    {
+        return view('frontend.auth.view-profile');
+    }
+
+    public function updatePassword()
+    {
+        return view('frontend.auth.update-password');
+    }
+
 
 }
