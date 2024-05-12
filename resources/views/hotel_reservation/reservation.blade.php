@@ -1,101 +1,146 @@
 @extends('layouts.master')
-
+@section('title')
+    Reservation
+@endsection
 @section('content')
 
-<div class="page-content">
-                <div class="container-fluid">
+<style type="text/css">
+    .input-step{
+        border: 1px solid #ced4da;
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        overflow: visible;
+        height: 37.5px;
+        background: #fff;
+        padding: 4px;
+    }
+    .input-step button {
+        width: 1.4em;
+        font-weight: 300;
+        height: 100%;
+        line-height: .1em;
+        font-size: 1.4em;
+        padding: .2em !important;
+        background: #f3f6f9;
+        color: #212529;
+        border: none;
+        border-radius: var(--vz-border-radius);
+    }
 
-                    <!-- start page title -->
-                    <div class="container">
-                        <div class="col-12">
-                            <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-transparent">
-                                <h4 class="mb-sm-0">Reservation</h4>
+    .input-step input {
+        width: 2em;
+        height: 100%;
+        text-align: center;
+        border: 0;
+        background: 0 0;
+        color: #212529;
+    }
 
-                                <div class="page-title-right">
-                                    <ol class="breadcrumb m-0">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Reservation</a></li>
-                                        <li class="breadcrumb-item active"> Reservation</li>
-                                    </ol>
+</style>
+    <!-- Header End -->
+
+    <!-- Breadcrumb Section Begin -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-text">
+                        <h2>Reservation</h2>
+                        <!-- <div class="bt-option">
+                            <a href="">Room Details</a>
+                            <span>Rooms</span>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb Section End -->
+
+
+    <section class="rooms-section spad">
+        <div class="container">
+            <form action="#" class="contact-form">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>Check-In Date</label>
+                            <input type="date" class="form-control" id="check_in" name="check_in">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group">
+                            <label>Check-Out Date</label>
+                            <input type="date" class="form-control" id="check_out" name="check_out">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 justify-content-center align-self-center">
+                        <button type="button" class="btn btn-success align-middle" onclick="searchRooms();">Search</button>
+                    </div>
+                </div>
+            </form>
+
+            
+            <div class="loader" id="loading_div"></div>
+            
+            <div class="card p-0" id="available_room_div" style="">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-8 pr-0 pl-1" id="room_list_div">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-sm-4 px-1">
+                                            <img class="img-thumbnail" src="https://www.dusairesorts.com/images/Spa-Closer-Banner.jpg">
+                                        </div>
+                                        <div class="col-sm-8 p-2 border rounded">
+                                            <div>
+                                                <h4 style="color:#8c68cd;">Sea View</h4>
+                                                Room Capacity: 2 Adults 2 Children
+                                                <div class="row pr-3">
+                                                    <div class="col-sm-8">Room Rates Exclusive of Ser. Chg. &amp; VAT</div>
+                                                    <div class="col-sm-4 p-2 border rounded">
+                                                        <b style="color:#8c68cd;">From BDT 16000</b><br>Price for 2 Night
+                                                    </div>
+                                                </div>
+                                                <button class="btn btn-primary btn-border mt-3 me-1 float-right" onclick="showInputPlus(this, 2, 2,3, 41)">Add Room</button>
+
+                                                <div class="input-step mt-3 me-1 float-right border rounded" style="display:none;">
+                                                    <button type="button" class="minus border rounded" onclick="decrement(this, 41);">–</button>
+                                                    <input type="text" class="product-quantity" value="0" min="0" max="5" readonly>
+                                                    <button type="button" class="plus border rounded" onclick="increment(this, 2, 2, 3, 41);">+</button>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-success btn-border mt-3 me-1 float-right confirm-button" style="display:none;" onclick="confirmRoom(this, 41, 'Sea View', 2, 2, 16000);">Confirm</button>
+                                        </div>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
-                    </div>
-                </div>
-                <!-- container-fluid -->
-                @include('layouts.message')
-
-                <div class="container">
-                    <div class="col-xl-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <form action="{{URL::to('admin/search-room-category')}}" method="post">
-                                    <div class="row gy-4">
-                                        <div class="col-xxl-3 col-md-6">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Check-in Date:</label>
-                                                <input type="date" class="form-control" id="check_in" value="04/30/2024" name="check_in">
-                                            </div>
-                                        </div>
-                                        <div class="col-xxl-3 col-md-6">
-                                            <div>
-                                                <label for="basiInput" class="form-label">Check-out Date:</label>
-                                                <input type="date" class="form-control" id="check_out" name="check_in" value="05/01/2024">
-                                            </div>
-                                        </div>                                        
-                                        <div class="col-xxl-3 col-md-6 d-flex">
-                                            <button type="button" class="btn btn-primary waves-effect waves-light align-self-end"  onclick="searchRooms();">Search</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="text-center" id="loading_div" style="display:none;">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-                <div class="row" id="available_room_div" style="display: none;">
-                    <div class="col-xl-12">
-                        <div class="card">
-                            <div class="card-header align-items-center d-flex">
-                                <h4 class="card-title mb-0 flex-grow-1">Available Rooms</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm-8 pe-0" id="room_list_div">
-
-                                    </div>
-
-                                    <div class="col-sm-4">
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <h4 class="card-title mb-0 text-center">Booking Summary</h4>
-                                            </div>
-                                            <div class="card-body" id="summary_div" style="display:none;">
-                                                <ul class="list-group">
-                                                    <li class="list-group-item">
-                                                        <b style="color:#495057;margin-right: 10%;">Dates:</b> 
-                                                        <span id="date_range">2024-05-13&nbsp; - &nbsp;2024-05-14</span>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <b style="color:#495057;margin-right: 10%;">Nights:</b> 
-                                                        <span id="no_of_days">1</span>
-                                                    </li>
-                                                    <li class="list-group-item" id="booked_room">
-                                                        
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <b style="color:#495057;margin-right: 10%;">Total:</b> 
-                                                        <b class="float-end" style="font-size: 20px;color: #8c68cd" id="final_total"></b>
-                                                    </li>
-                                                </ul>
-                                                <button type="button" class="btn btn-primary waves-effect waves-light w-100" onclick="bookNow();">Book Now</button>
-                                            </div>
-                                        </div>
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="text-center">Booking Summary</h4>
+                                    <br>
+                                    <div id="summary_div" style="display:none;">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <b style="color:#495057;margin-right: 10%;">Dates:</b> 
+                                            <span id="date_range">2024-05-09-2024-05-11</span>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <b style="color:#495057;margin-right: 10%;">Nights:</b> 
+                                            <span id="no_of_days">2</span>
+                                        </li>
+                                        <li class="list-group-item" id="booked_room">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <b style="color:#495057;margin-right: 10%;">Total:</b> 
+                                            <b class="float-end" style="font-size: 20px;color: #8c68cd" id="final_total">BDT 16000</b>
+                                        </li>
+                                        <button type="button" class="btn btn-primary waves-effect waves-light w-100" onclick="bookNow();">Book Now</button>
+                                    </ul>
                                     </div>
                                 </div>
                             </div>
@@ -103,19 +148,19 @@
                     </div>
                 </div>
             </div>
-            <hr>
-            
-            <!-- End Page-content -->
+        </div>
+    </section>
+    <!-- Rooms Section End -->
 
-        <!-- end main content-->
+    <!-- Footer Section Begin -->
+
 @endsection
 
-@section('scripts')
-<script src="{{asset('assets/js/pages/form-input-spin.init.js')}}"></script>
+@section('script')
 <script>
-    // $( document ).ready(function() {
-    //     searchRooms();
-    // });
+    $(document).ready(function() {
+        // searchRooms();
+    });
     var room_categories = [];
     var check_in = '';
     var check_out = ''
@@ -142,6 +187,7 @@
             dataType: 'json',
         })
         .done(function (data) {
+            console.log(data)
             var dateList = getdateList(check_in, check_out);
             var available_rooms = data.available_rooms;
             var room_rent = data.room_category_rent_arr;
@@ -170,15 +216,15 @@
                 console.log(room_price_rent)
                 html += '<div class="card">'+
                             '<div class="card-body">'+
-                                '<div class="row me-1">'+
-                                    '<div class="col-sm-4">'+
-                                        '<img class="img-thumbnail" src="../'+item.path+item.filename+'">'+
+                                '<div class="row">'+
+                                    '<div class="col-sm-4 px-1">'+
+                                        '<img class="img-thumbnail" src="'+pmsUrl+item.path+item.filename+'">'+
                                     '</div>'+
-                                    '<div class="col-sm-8 p-3 border rounded">'+
+                                    '<div class="col-sm-8 p-2 border rounded">'+
                                     '<div>'+
                                         '<h4 style="color:#8c68cd;">'+item.category+'</h4>'+
                                         'Room Capacity: '+item.people_adult+' Adults '+item.people_child+' Children'+
-                                        '<div class="row me-1">'+
+                                        '<div class="row pr-3">'+
                                             '<div class="col-sm-8">'+
                                                 'Room Rates Exclusive of Ser. Chg. & VAT'+
                                             '</div>'+
@@ -187,16 +233,16 @@
                                                 '<br>Price for '+length+' Night'+
                                             '</div>'+
                                         '</div>'+
-                                        '<button class="btn btn-primary btn-border mt-3 me-1 float-sm-end" onclick="showInputPlus(this, '+item.people_adult+', '+item.people_child+','+item.no_of_rooms+', '+item.id+')">'+
+                                        '<button class="btn btn-primary btn-border mt-3 me-1 float-right" onclick="showInputPlus(this, '+item.people_adult+', '+item.people_child+','+item.no_of_rooms+', '+item.id+')">'+
                                             'Add Room'+
                                         '</button>'+
-                                        '<div class="input-step mt-3 me-1 float-sm-end" style="display:none;">'+
-                                            '<button type="button" class="minus" onclick="decrement(this, '+item.id+');">–</button>'+
-                                            '<input type="number" class="product-quantity" value="0" min="0" max="5">'+
-                                            '<button type="button" class="plus" onclick="increment(this, '+item.people_adult+', '+item.people_child+', '+item.no_of_rooms+', '+item.id+');">+</button>'+
+                                        '<div class="input-step mt-3 me-1 float-right border rounded" style="display:none;">'+
+                                            '<button type="button" class="minus border rounded" onclick="decrement(this, '+item.id+');">–</button>'+
+                                            '<input type="text" class="product-quantity" value="0" min="0" max="5" readonly>'+
+                                            '<button type="button" class="plus border rounded" onclick="increment(this, '+item.people_adult+', '+item.people_child+', '+item.no_of_rooms+', '+item.id+');">+</button>'+
                                         '</div>'+
                                     '</div>'+
-                                    '<button class="btn btn-success btn-border mt-3 me-1 float-sm-end confirm-button" style="display:none;" onclick="confirmRoom(this, '+item.id+', \''+item.category+'\', '+item.people_adult+', '+item.people_child+', '+room_price_rent+');">'+
+                                    '<button class="btn btn-success btn-border mt-3 me-1 float-right confirm-button" style="display:none;" onclick="confirmRoom(this, '+item.id+', \''+item.category+'\', '+item.people_adult+', '+item.people_child+', '+room_price_rent+');">'+
                                             'Confirm'+
                                     '</button>'+
                                     '</div>'+
@@ -223,6 +269,7 @@
         }
         return dateList;
     }
+
     function pad(str, max) {
       str = str.toString();
       return str.length < max ? pad("0" + str, max) : str;
@@ -275,8 +322,8 @@
 
     function createPeopleCount(element, people_adult, people_child, id){
         var numItems = $(element).prev().val();
-        var html = '<div class="row me-1 pt-2 w-100 people-count">'+
-                        '<div class="col-sm-2">'+
+        var html = '<div class="row w-100 people-count mb-2">'+
+                        '<div class="col-sm-3">'+
                             '<b>Room '+numItems+'</b>'+
                         '</div>'+
                         '<div class="col-sm-4">'+
@@ -357,40 +404,40 @@
         $("#final_total").text("BDT "+final_price );
     }
 
-    function bookNow(){
-        $('.confirm-button').each(function(i, obj) {
-            if(!$(this).is(":hidden")){
-                alert("Please confirm rooms");
-                return false;
-            }
-        });
-        var booking_data = [];
-        $.each(room_categories,function( key, value ) {
-            var people_adult = $("select[name='people_adult_"+value+"[]']").map(function(){ if($(this).val()!='') return $(this).val();}).get();
-            var people_child = $("select[name='people_child_"+value+"[]']").map(function(){ if($(this).val()!='') return $(this).val();}).get();
-            var arr = [value, $("#"+value).children().eq(0).text() , people_adult, people_child, $("#"+value).find(".room-rent").text(), people_adult.length]
-            booking_data.push(arr);
-        });
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            type: 'POST',
-            url: 'book-room-temp',
-            data: {
-              check_in : check_in,
-              check_out : check_out,
-              booking_data : booking_data,
-            },
-            dataType: 'json',
-        })
-        .done(function (data) {
-            // console.log(data);
-            window.location.href = "./billing-info";
-        });
+    // function bookNow(){
+    //     $('.confirm-button').each(function(i, obj) {
+    //         if(!$(this).is(":hidden")){
+    //             alert("Please confirm rooms");
+    //             return false;
+    //         }
+    //     });
+    //     var booking_data = [];
+    //     $.each(room_categories,function( key, value ) {
+    //         var people_adult = $("select[name='people_adult_"+value+"[]']").map(function(){ if($(this).val()!='') return $(this).val();}).get();
+    //         var people_child = $("select[name='people_child_"+value+"[]']").map(function(){ if($(this).val()!='') return $(this).val();}).get();
+    //         var arr = [value, $("#"+value).children().eq(0).text() , people_adult, people_child, $("#"+value).find(".room-rent").text(), people_adult.length]
+    //         booking_data.push(arr);
+    //     });
+    //     $.ajaxSetup({
+    //         headers: {
+    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //         }
+    //     });
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: 'book-room-temp',
+    //         data: {
+    //           check_in : check_in,
+    //           check_out : check_out,
+    //           booking_data : booking_data,
+    //         },
+    //         dataType: 'json',
+    //     })
+    //     .done(function (data) {
+    //         // console.log(data);
+    //         window.location.href = "./billing-info";
+    //     });
 
-    }
+    // }
 </script>
 @endsection
