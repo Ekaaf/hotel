@@ -225,7 +225,7 @@ Room Details
             <div class="col-lg-4">
                 <div class="room-booking">
                     <h3>Your Reservation</h3>
-                    <form action="{{ route('Hotel.Reservation.View') }}" method="POST">
+                    <form action="{{ route('Hotel.Reservation.View') }}" method="GET">
                         <div class="check-date">
                             <label for="date-in">Check In:</label>
                             <input type="text" class="date-input" id="date-in">

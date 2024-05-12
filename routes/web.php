@@ -34,6 +34,7 @@ Route::get('/home', [HomeController::class, 'home'])->name('home');
 Route::get('/about', [AboutController::class, 'about'])->name('about');
 //Profile
 Route::get('/view-profile', [LoginController::class, 'viewProfile'])->name('view-profile');
+Route::get('/reset-password', [LoginController::class, 'resetPassword'])->name('reset-password');
 Route::get('/update-password', [LoginController::class, 'updatePassword'])->name('update-password');
 
 

@@ -21,7 +21,14 @@ class LoginController extends Controller
 
     public function viewProfile()
     {
-        return view('frontend.auth.view-profile');
+        $booking_data_temp = $request->session()->get('booking_data_temp');
+        $customers = User::where('role_id', Role::where('name', 'Customer')->value('id'))->get();
+        return view('frontend.auth.view-profile')->with('booking_data_temp', $booking_data_temp)->with('customers', $customers);
+    }
+
+    public function resetPassword()
+    {
+        return view('frontend.auth.reset-password');
     }
 
     public function updatePassword()

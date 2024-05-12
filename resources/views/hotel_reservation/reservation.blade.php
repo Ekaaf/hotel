@@ -159,7 +159,7 @@
 @section('script')
 <script>
     $(document).ready(function() {
-        // searchRooms();
+        // searchRooms();        
     });
     var room_categories = [];
     var check_in = '';
