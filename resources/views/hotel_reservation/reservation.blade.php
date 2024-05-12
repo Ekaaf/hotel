@@ -404,40 +404,40 @@
         $("#final_total").text("BDT "+final_price );
     }
 
-    // function bookNow(){
-    //     $('.confirm-button').each(function(i, obj) {
-    //         if(!$(this).is(":hidden")){
-    //             alert("Please confirm rooms");
-    //             return false;
-    //         }
-    //     });
-    //     var booking_data = [];
-    //     $.each(room_categories,function( key, value ) {
-    //         var people_adult = $("select[name='people_adult_"+value+"[]']").map(function(){ if($(this).val()!='') return $(this).val();}).get();
-    //         var people_child = $("select[name='people_child_"+value+"[]']").map(function(){ if($(this).val()!='') return $(this).val();}).get();
-    //         var arr = [value, $("#"+value).children().eq(0).text() , people_adult, people_child, $("#"+value).find(".room-rent").text(), people_adult.length]
-    //         booking_data.push(arr);
-    //     });
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //         }
-    //     });
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: 'book-room-temp',
-    //         data: {
-    //           check_in : check_in,
-    //           check_out : check_out,
-    //           booking_data : booking_data,
-    //         },
-    //         dataType: 'json',
-    //     })
-    //     .done(function (data) {
-    //         // console.log(data);
-    //         window.location.href = "./billing-info";
-    //     });
+    function bookNow(){
+        $('.confirm-button').each(function(i, obj) {
+            if(!$(this).is(":hidden")){
+                alert("Please confirm rooms");
+                return false;
+            }
+        });
+        var booking_data = [];
+        $.each(room_categories,function( key, value ) {
+            var people_adult = $("select[name='people_adult_"+value+"[]']").map(function(){ if($(this).val()!='') return $(this).val();}).get();
+            var people_child = $("select[name='people_child_"+value+"[]']").map(function(){ if($(this).val()!='') return $(this).val();}).get();
+            var arr = [value, $("#"+value).children().eq(0).text() , people_adult, people_child, $("#"+value).find(".room-rent").text(), people_adult.length]
+            booking_data.push(arr);
+        });
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type: 'POST',
+            url: 'book-room-temp',
+            data: {
+              check_in : check_in,
+              check_out : check_out,
+              booking_data : booking_data,
+            },
+            dataType: 'json',
+        })
+        .done(function (data) {
+            // console.log(data);
+            window.location.href = "./billing-info";
+        });
 
-    // }
+    }
 </script>
 @endsection
