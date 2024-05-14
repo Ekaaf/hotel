@@ -51,3 +51,4 @@ Route::post('/search-room-category', [ReservationController::class, 'searchRoomC
 Route::get('/billing-info', [ReservationController::class, 'billingInfo'])->name('Hotel.BillingInfo');
 Route::post('/book-room-temp', [ReservationController::class, 'bookRoomTemp'])->name('Hotel.bookRoomTemp');
 Route::post('/confirm-booking', [ReservationController::class, 'confirmBooking'])->name('Hotel.confirmBooking');
+Route::post('/get-user-info', [ReservationController::class, 'getUserInfo'])->name('Hotel.GetUserInfo');

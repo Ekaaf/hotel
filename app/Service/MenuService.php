@@ -231,7 +231,8 @@ class MenuService
     {
         $user = new User();
         $user->email = $request->email;
-        $user->password = randomPassword(8);
+        // $user->password = randomPassword(8);
+        $user->password = '12345678';
         $user->mobile = $request->mobile;
         if($request->user_type == 'new_user') {
             $user->role_id = Role::where('name', 'Customer')->value('id');
@@ -240,7 +241,7 @@ class MenuService
         }
         $user->verified = 0;
         $user->status = 1;
-        $user->created_by = Auth::user()->id;
+        // $user->created_by = Auth::user()->id;
         $user->save();
 
 
@@ -254,7 +255,7 @@ class MenuService
         $userInfo->city = $request->city;
         $userInfo->country = $request->country;
         $userInfo->gender = $request->gender;
-        $userInfo->created_by = Auth::user()->id;
+        // $userInfo->created_by = Auth::user()->id;
         $userInfo->save();
 
         return $user->id;
@@ -276,7 +277,7 @@ class MenuService
         $billing->price_with_vat = 0;
         $billing->adjustment = 0;
         $billing->final_price = $total_price;
-        $billing->created_by = Auth::user()->id;
+        $billing->created_by = $user_id;
         $billing->payment_completed = 0;
 
         $billing->save();
@@ -288,7 +289,8 @@ class MenuService
         $biilingOtherInfo->expire_date = $request->expire_date;
         $biilingOtherInfo->dob = $request->dob;
         $biilingOtherInfo->nationality = $request->nationality;
-        $biilingOtherInfo->created_by = Auth::user()->id;
+        // $biilingOtherInfo->created_by = Auth::user()->id;
+        $biilingOtherInfo->created_by = $user_id;
 
         $biilingOtherInfo->save();
 
@@ -339,7 +341,8 @@ class MenuService
                 $booking_arr[$i]['discount'] = 0;
                 $booking_arr[$i]['total_price'] = 0;
                 $booking_arr[$i]['vat'] = 0;
-                $booking_arr[$i]['created_by'] = Auth::user()->id;
+                // $booking_arr[$i]['created_by'] = Auth::user()->id;
+                $booking_arr[$i]['created_by'] = $user_id;
                 ;
                 $booking_arr[$i]['room_category_id'] = $room->room_category_id;
                 $booking_arr[$i]['created_at'] = date('Y-m-d H:i:s');
